@@ -6,15 +6,20 @@ import config from '../config';
 import './Note.css';
 
 export default class Note extends React.Component {
-  static defaultProps = {
-    onDeleteNote: () => {}
-  };
+  constructor(props) {
+    super(props);
+    this.handleClickDelete = this.handleClickDelete.bind(this);
+  }
+  //static defaultProps = {
+  // onDeleteNote: () => {}
+  //};
+
   static contextType = ApiContext;
 
-  handleClickDelete = e => {
+  handleClickDelete(e) {
     e.preventDefault();
     const noteId = this.props.id;
-
+    console.log(noteId);
     fetch(`${config.API_ENDPOINT}/notes/${noteId}`, {
       method: 'DELETE',
       headers: {
@@ -22,21 +27,22 @@ export default class Note extends React.Component {
       }
     })
       .then(res => {
-        if (!res.ok) return res.json().then(e => Promise.reject(e));
-        return res.json();
-      })
-      .then(() => {
+        console.log('made it to error');
+        if (!res.ok) {
+          return res.json().then(error => Promise.reject(error));
+        }
+        console.log('made it to 2 error');
         this.context.deleteNote(noteId);
-        // allow parent to perform extra behaviour
-        this.props.onDeleteNote(noteId);
       })
+
       .catch(error => {
         console.error({ error });
       });
-  };
+  }
 
   render() {
     const { name, id, modified } = this.props;
+    console.log(name, id, modified);
     return (
       <div className='Note'>
         <h2 className='Note__title'>
