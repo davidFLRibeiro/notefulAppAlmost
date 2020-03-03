@@ -2,10 +2,10 @@ import React from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import CircleButton from '../CircleButton/CircleButton';
 import ApiContext from '../ApiContext';
-import { findNote, findFolder } from '../notes-helpers';
+//import { findNote, findFolder } from '../notes-helpers';
 import { countNotesForFolder } from '../notes-helpers';
 import './NoteListNav.css';
-import Addfolder from '../Addfolder';
+//import Addfolder from '../Addfolder';
 
 export default class NoteListNav extends React.Component {
   static contextType = ApiContext;

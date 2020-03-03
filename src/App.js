@@ -21,8 +21,10 @@ class App extends Component {
       folders: [],
       onChangeFolder: '',
       onChangeNote: '',
-      slectedFolder: '',
-      noteTxtArea: ''
+      selectedFolder: '',
+      noteTxtArea: '',
+      isValid: false,
+      isNoteValid: false
     };
     this.handleAddFolder = this.handleAddFolder.bind(this);
     this.onChangeFolder = this.onChangeFolder.bind(this);
@@ -59,7 +61,9 @@ class App extends Component {
     e.preventDefault();
     //`${config.API_ENDPOINT}/folders`
     // console.log('handle add folder from made it', this.state.onChangeFolder);
-    const { name } = this.state.onChangeFolder;
+    if (this.state.onChangeFolder.length === 0) {
+      return this.setState({ isValid: true });
+    }
     const folder = {
       name: this.state.onChangeFolder
     };
@@ -77,9 +81,15 @@ class App extends Component {
         return res.json();
       })
       .then(data => {
-        name.value = this.state.onChangeFolder;
+        //name.value = this.state.onChangeFolder;
         //this.context.addFolder(data);
-        this.setState({ folder: [...this.state.folders, data] });
+        this.setState(folders => {
+          const updatedFolder = this.state.folders.push(data);
+          return {
+            updatedFolder,
+            onChangeFolder: ''
+          };
+        });
         this.props.history.push('/');
       })
       .catch(error => {
@@ -92,14 +102,20 @@ class App extends Component {
 
   handleAddNote = e => {
     e.preventDefault();
-
+    if (
+      this.state.onChangeNote.length === 0 ||
+      this.state.noteTxtArea.length === 0
+    ) {
+      return this.setState({ isNoteValid: true });
+    }
     // const { name, content, folderId } = e.target;
     const note = {
       name: this.state.onChangeNote,
       content: this.state.noteTxtArea,
-      folder_id: this.state.selectedFolders,
-      modified: new Date()
+      folderId: this.state.selectedFolder,
+      modified: new Date().toISOString().slice(0, 10)
     };
+
     fetch(`${config.API_ENDPOINT}/notes`, {
       method: 'POST',
       body: JSON.stringify(note),
@@ -120,7 +136,10 @@ class App extends Component {
         this.setState(notes => {
           const updatedNote = this.state.notes.push(data);
           return {
-            updatedNote
+            updatedNote,
+            onChangeNote: '',
+            onChangeFolder: '',
+            noteTxtArea: ''
           };
         });
         this.props.history.push('/');
@@ -146,19 +165,13 @@ class App extends Component {
   noteFolderIdChange = e => {
     e.preventDefault();
     console.log('note folder change', e.target.value);
-    this.setState({ selectedFolders: e.target.value });
+    this.setState({ selectedFolder: e.target.value });
   };
 
   onChangeNoteTxtArea = e => {
     e.preventDefault();
     console.log(e.target.value);
     this.setState({ noteTxtArea: e.target.value });
-  };
-
-  slectedFolder = e => {
-    e.preventDefault();
-    console.log(e.target.value);
-    this.setState({ slectedFolder: e.target.value });
   };
 
   renderNavRoutes() {
@@ -176,6 +189,7 @@ class App extends Component {
                 handleAddFolder={this.handleAddFolder}
                 onChangeFolder={this.onChangeFolder}
                 text={this.state.onChangeFolder}
+                isValid={this.state.isValid}
                 {...props}
               />
             </NoteFullError>
@@ -202,10 +216,11 @@ class App extends Component {
               handleAddNote={this.handleAddNote}
               onChangeNote={this.onChangeNote}
               text={this.state.onChangeNote}
-              slectedFolder={this.state.slectedFolder}
+              selectedFolder={this.state.selectedFolder}
               noteFolderIdChange={this.noteFolderIdChange}
               textArea={this.state.noteTxtArea}
               onChangeNoteTxtArea={this.onChangeNoteTxtArea}
+              isNoteValid={this.state.isNoteValid}
               {...props}
             />
           )}
@@ -221,7 +236,7 @@ class App extends Component {
       folders: this.state.folders,
       deleteNote: this.handleDeleteNote
     };
-    console.log(value);
+    console.log(this.state.folders, this.state.notes);
     return (
       <ApiContext.Provider value={value}>
         <div className='App'>
