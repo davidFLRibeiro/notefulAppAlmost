@@ -19,7 +19,7 @@ class Addnote extends Component {
             onChange={this.props.onChangeNote}
           ></input>
           <select
-            value={this.props.slectedFolder}
+            value={this.props.selectedFolder}
             onChange={this.props.noteFolderIdChange}
           >
             {this.props.folders.map(folder => {

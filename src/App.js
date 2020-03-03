@@ -108,7 +108,7 @@ class App extends Component {
     ) {
       return this.setState({ isNoteValid: true });
     }
-    // const { name, content, folderId } = e.target;
+
     const note = {
       name: this.state.onChangeNote,
       content: this.state.noteTxtArea,
