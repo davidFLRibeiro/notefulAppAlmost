@@ -51,7 +51,7 @@ Addnote.propTypes = {
   text: PropTypes.string,
   onChangeNote: PropTypes.func,
   handleAddFolder: PropTypes.func,
-  slectedFolder: PropTypes.string,
+  selectedFolder: PropTypes.string,
   noteFolderIdChange: PropTypes.func,
   textArea: PropTypes.string,
   onChangeNoteTxtArea: PropTypes.func,

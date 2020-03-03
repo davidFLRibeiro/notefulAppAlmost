@@ -112,10 +112,10 @@ class App extends Component {
     const note = {
       name: this.state.onChangeNote,
       content: this.state.noteTxtArea,
-      folderId: this.state.selectedFolder,
+      folder_id: this.state.selectedFolder,
       modified: new Date().toISOString().slice(0, 10)
     };
-
+    console.log(this.state.selectedFolder);
     fetch(`${config.API_ENDPOINT}/notes`, {
       method: 'POST',
       body: JSON.stringify(note),
