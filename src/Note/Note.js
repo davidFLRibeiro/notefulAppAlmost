@@ -1,11 +1,11 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { Component } from 'react';
+import { Link, withRouter } from 'react-router-dom';
 //import { format } from 'date-fns';
 import ApiContext from '../ApiContext';
 import config from '../config';
 import './Note.css';
 
-export default class Note extends React.Component {
+class Note extends Component {
   constructor(props) {
     super(props);
     this.handleClickDelete = this.handleClickDelete.bind(this);
@@ -17,7 +17,7 @@ export default class Note extends React.Component {
     e.preventDefault();
     const noteId = this.props.id;
 
-    fetch(`${config.API_ENDPOINT}api/notes/${noteId}`, {
+    fetch(`${config.API_ENDPOINT}/notes/${noteId}`, {
       method: 'DELETE',
       headers: {
         'content-type': 'application/json'
@@ -29,6 +29,7 @@ export default class Note extends React.Component {
         }
 
         this.context.deleteNote(noteId);
+        this.props.history.push('/');
       })
 
       .catch(error => {
@@ -58,3 +59,5 @@ export default class Note extends React.Component {
     );
   }
 }
+
+export default withRouter(Note);

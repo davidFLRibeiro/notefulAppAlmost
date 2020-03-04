@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import './AddNoteStyle.css';
 
 class Addnote extends Component {
   render() {
