@@ -91,6 +91,7 @@ class App extends Component {
           };
         });
         this.props.history.push('/');
+        this.setState({ isValid: false });
       })
       .catch(error => {
         console.log(error);
@@ -143,6 +144,7 @@ class App extends Component {
           };
         });
         this.props.history.push('/');
+        this.setState({ isNoteValid: false });
       })
       .catch(error => {
         console.error(error);
